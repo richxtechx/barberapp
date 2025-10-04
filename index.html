@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BarberShop Pro - Sistema de Usuarios</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <div id="authScreen">
+            <div class="header">
+                <h1>✂️ BarberShop Pro</h1>
+                <div class="subtitle">Sistema de Usuarios</div>
+            </div>
+
+            <div class="auth-container">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="showAuthTab('login')">Iniciar Sesión</button>
+                    <button class="auth-tab" onclick="showAuthTab('register')">Crear Usuario</button>
+                </div>
+
+                <div id="loginForm" class="auth-form">
+                    <h3 style="color: #d4af37; margin-bottom: 20px;">Iniciar Sesión</h3>
+                    <form id="mainLoginForm">
+                        <div class="form-group">
+                            <label class="form-label">Nombre de Usuario</label>
+                            <input type="text" id="loginName" class="form-input" placeholder="Tu nombre de usuario" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Contraseña</label>
+                            <input type="password" id="loginPassword" class="form-input" placeholder="Tu contraseña" required>
+                        </div>
+                        <button type="submit" class="btn">Iniciar Sesión</button>
+                    </form>
+                </div>
+
+                <div id="registerForm" class="auth-form" style="display: none;">
+                    <h3 style="color: #d4af37; margin-bottom: 20px;">Crear Usuario</h3>
+                    <form id="mainRegisterForm">
+                        <div class="form-group">
+                            <label class="form-label">Nombre Completo</label>
+                            <input type="text" id="registerName" class="form-input" placeholder="Tu nombre completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Número de Teléfono</label>
+                            <input type="tel" id="registerPhone" class="form-input" placeholder="(555) 123-4567" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Correo Electrónico</label>
+                            <input type="email" id="registerEmail" class="form-input" placeholder="tu@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Dirección</label>
+                            <input type="text" id="registerAddress" class="form-input" placeholder="Tu dirección completa" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Contraseña</label>
+                            <input type="password" id="registerPassword" class="form-input" placeholder="Mínimo 6 caracteres" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirmar Contraseña</label>
+                            <input type="password" id="confirmPassword" class="form-input" placeholder="Repite tu contraseña" required>
+                        </div>
+                        <button type="submit" class="btn">Crear Usuario</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="mainApp" style="display: none;">
+            <div class="header">
+                <h1>✂️ BarberShop Pro</h1>
+                <div class="subtitle" id="headerSubtitle">Dashboard</div>
+                <div class="user-info">
+                    <span id="currentUser">Usuario</span>
+                    <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+                </div>
+            </div>
+
+            <div id="clientDashboard" class="app-mode">
+                <div class="nav-tabs">
+                    <button class="nav-tab active" onclick="showClientTab('dashboard')">Dashboard</button>
+                    <button class="nav-tab" onclick="showClientTab('services')">Servicios</button>
+                    <button class="nav-tab" onclick="showClientTab('booking')">Reservar</button>
+                    <button class="nav-tab" onclick="showClientTab('appointments')">Mis Citas</button>
+                    <button class="nav-tab" onclick="showClientTab('profile')">Perfil</button>
+                </div>
+
+                <div id="client-dashboard" class="tab-content active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="clientTotalAppointments">0</div>
+                            <div class="stat-label">Citas Totales</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="clientPendingAppointments">0</div>
+                            <div class="stat-label">Pendientes</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="clientCompletedAppointments">0</div>
+                            <div class="stat-label">Completadas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="clientTotalSpent">$0</div>
+                            <div class="stat-label">Total Gastado</div>
+                        </div>
+                    </div>
+
+                    <h3 style="color: #d4af37; margin-bottom: 20px;">Próximas Citas</h3>
+                    <div id="clientUpcomingAppointments">
+                        </div>
+                </div>
+
+                <div id="client-services" class="tab-content">
+                    <div id="clientServicesList">
+                        </div>
+                </div>
+
+                <div id="client-booking" class="tab-content">
+                    <form id="bookingForm">
+                        <div class="form-group">
+                            <label class="form-label">Servicio Seleccionado</label>
+                            <input type="text" id="selectedService" class="form-input" readonly>
+                            <input type="hidden" id="selectedPrice">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Fecha</label>
+                            <input type="date" id="appointmentDate" class="form-input" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Horario Disponible</label>
+                            <div class="time-slots" id="clientTimeSlots">
+                                </div>
+                        </div>
+
+                        <button type="submit" class="btn">Confirmar Cita</button>
+                    </form>
+                </div>
+
+                <div id="client-appointments" class="tab-content">
+                    <div id="clientAppointmentsList">
+                        </div>
+                </div>
+
+                <div id="client-profile" class="tab-content">
+                    <div class="profile-card">
+                        <h3 style="color: #d4af37; margin-bottom: 20px;">Mi Perfil</h3>
+                        <div id="clientProfileInfo">
+                            </div>
+                        <button class="btn" onclick="editProfile()">Editar Perfil</button>
+                    </div>
+
+                    <div class="profile-card">
+                        <h3 style="color: #d4af37; margin-bottom: 20px;">Métodos de Pago</h3>
+                        <div class="payment-methods">
+                            <div class="payment-card" onclick="openPaymentLink('zelle')">
+                                <div class="payment-icon">💳</div>
+                                <div class="payment-name">Zelle</div>
+                                <div style="color: #999; font-size: 12px; margin-top: 5px;">Pago instantáneo</div>
+                            </div>
+                            
+                            <div class="payment-card" onclick="openPaymentLink('cashapp')">
+                                <div class="payment-icon">💰</div>
+                                <div class="payment-name">Cash App</div>
+                                <div style="color: #999; font-size: 12px; margin-top: 5px;">Rápido y seguro</div>
+                            </div>
+                        </div>
+
+                        <div style="background: #1a1a1a; padding: 20px; border-radius: 12px; margin-top: 20px;">
+                            <h4 style="color: #d4af37; margin-bottom: 15px;">📱 Información de Pago</h4>
+                            <div style="background: #2d2d2d; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                                <p style="color: #cccccc; font-size: 14px; line-height: 1.6; margin: 0;">
+                                    <strong style="color: #d4af37;">💳 Zelle:</strong> barbershoppro@email.com<br>
+                                    <strong style="color: #d4af37;">💰 Cash App:</strong> $BarberShopPro
+                                </p>
+                            </div>
+                            <div style="background: #0d4f3c; padding: 15px; border-radius: 8px; border-left: 4px solid #4CAF50;">
+                                <p style="color: #ffffff; font-size: 13px; margin: 0; line-height: 1.5;">
+                                    <strong>📋 Instrucciones:</strong><br>
+                                    1. Realiza el pago usando Zelle o Cash App<br>
+                                    2. Incluye tu nombre y fecha de cita en el concepto<br>
+                                    3. El barbero confirmará tu cita al recibir el pago<br>
+                                    4. Recibirás confirmación en la app
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="adminDashboard" class="app-mode">
+                <div class="nav-tabs">
+                    <button class="nav-tab active" onclick="showAdminTab('dashboard')">Dashboard</button>
+                    <button class="nav-tab" onclick="showAdminTab('appointments')">Citas</button>
+                    <button class="nav-tab" onclick="showAdminTab('clients')">Clientes</button>
+                    <button class="nav-tab" onclick="showAdminTab('services')">Servicios</button>
+                    <button class="nav-tab" onclick="showAdminTab('schedule')">Horarios</button>
+                    <button class="nav-tab" onclick="showAdminTab('earnings')">Ganancias</button>
+                </div>
+
+                <div id="admin-dashboard" class="tab-content active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="todayAppointments">0</div>
+                            <div class="stat-label">Citas Hoy</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="pendingAppointments">0</div>
+                            <div class="stat-label">Pendientes</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="todayEarnings">$0</div>
+                            <div class="stat-label">Ganancias Hoy</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalClients">0</div>
+                            <div class="stat-label">Clientes Total</div>
+                        </div>
+                    </div>
+
+                    <h3 style="color: #d4af37; margin-bottom: 20px;">Próximas Citas</h3>
+                    <div id="upcomingAppointments">
+                        </div>
+                </div>
+
+                <div id="admin-appointments" class="tab-content">
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="filterAppointments('all')">Todas</button>
+                        <button class="filter-btn" onclick="filterAppointments('pending')">Pendientes</button>
+                        <button class="filter-btn" onclick="filterAppointments('confirmed')">Confirmadas</button>
+                        <button class="filter-btn" onclick="filterAppointments('completed')">Completadas</button>
+                    </div>
+                    
+                    <div id="adminAppointmentsList">
+                        </div>
+                </div>
+
+                <div id="admin-clients" class="tab-content">
+                    <div id="adminClientsList">
+                        </div>
+                </div>
+
+                <div id="admin-services" class="tab-content">
+                    <button class="btn" onclick="showAddServiceModal()" style="margin-bottom: 20px;">
+                        ➕ Agregar Nuevo Servicio
+                    </button>
+                    
+                    <div id="adminServicesList">
+                        </div>
+                </div>
+
+                <div id="admin-schedule" class="tab-content">
+                    <div class="form-group">
+                        <label class="form-label">Seleccionar Fecha</label>
+                        <input type="date" id="scheduleDate" class="form-input">
+                    </div>
+                    
+                    <h4 style="color: #d4af37; margin: 20px 0;">Gestionar Horarios</h4>
+                    <div id="adminTimeSlots" class="time-slots">
+                        </div>
+                    
+                    <button class="btn" onclick="saveScheduleChanges()" style="margin-top: 20px;">
+                        💾 Guardar Cambios
+                    </button>
+                </div>
+
+                <div id="admin-earnings" class="tab-content">
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="filterEarnings('today')">Hoy</button>
+                        <button class="filter-btn" onclick="filterEarnings('week')">Semana</button>
+                        <button class="filter-btn" onclick="filterEarnings('month')">Mes</button>
+                    </div>
+                    
+                    <div id="earningsSummary">
+                        </div>
+                    
+                    <div id="earningsDetails">
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
